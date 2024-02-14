@@ -1,0 +1,31 @@
+version: "3"
+services:
+  db:
+    image: mysql:latest
+    env_file: .env
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  back:
+    build: ./Dockerfile/back
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    env_file: .env
+    volumes:
+      - ./back:/app
+
+  app:
+    build: ./Dockerfile/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - back
+    env_file: .env
+    volumes:
+      - ./app:/app
+volumes:
+  db_data:
