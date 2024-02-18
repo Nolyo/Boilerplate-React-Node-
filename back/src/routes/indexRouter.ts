@@ -3,8 +3,8 @@ import usersRouter from "./usersRouter";
 
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+router.get("/", (_req: Request, res: Response) => {
+  res.send("Welcome in Backend");
 });
 
 router.use("/users", usersRouter);

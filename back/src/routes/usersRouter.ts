@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import userRepository from "../repositories/usersRepository";
 import usersController from "../controllers/usersController";
+import { verifyUser } from "./authMiddleware";
 
 const router = express.Router();
 /**
@@ -16,13 +16,41 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
-  if (!req.body.name || !req.body.email) {
-    res.status(400).send("Name and email are required");
+router.get("/:id", verifyUser, async (req: Request, res: Response) => {
+  if (!req.params.id || isNaN(parseInt(req.params.id))) {
+    res.status(400).send("Id is required");
+    return;
+  }
+  try {
+    const user = await usersController.getById(parseInt(req.params.id));
+    res.json(user);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.post("/signup", async (req: Request, res: Response) => {
+  if (!req.body.name || !req.body.email || !req.body.password) {
+    res.status(400).send("Name, email and password are required");
     return;
   }
   try {
     const user = await usersController.create(req.body);
+    res.json(user);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.post("/login", async (req: Request, res: Response) => {
+  console.log(req.body, "req.body");
+
+  if (!req.body.email || !req.body.password) {
+    res.status(400).send("Email and password are required");
+    return;
+  }
+  try {
+    const user = await usersController.login(req.body);
     res.json(user);
   } catch (error: any) {
     res.status(500).send(error.message);

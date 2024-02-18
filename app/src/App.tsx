@@ -1,32 +1,19 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Navbar from "./Components/Navbar";
+import Login from "./pages/Login";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("http://localhost:5000/users");
-      const data = await response.json();
-      console.log(data);
-    })();
-  }, []);
-
   return (
-    <div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/users" element={<div> Users</div>} />
+      </Routes>
+    </Router>
   );
 }
 
