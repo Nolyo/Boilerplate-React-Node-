@@ -12,17 +12,20 @@ export const verifyUser = (
   if (!token) {
     return res.status(403).send({ auth: false, message: "No token provided." });
   }
-  console.log(token);
+
   jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
     if (err) {
       return res
         .status(500)
         .send({ auth: false, message: "Failed to authenticate token." });
     }
-
-    // if everything good, save to request for use in other routes
-    // req.userId = parseInt(decoded?.id as string);
-    req.userId = 1;
-    next();
+    if (typeof decoded === "object" && "id" in decoded) {
+      req.userId = decoded?.id as number;
+      next();
+    } else {
+      res
+        .status(500)
+        .send({ auth: false, message: "Failed to authenticate token." });
+    }
   });
 };

@@ -27,7 +27,7 @@ export async function fetchAPIAuth(params: paramsType) {
 
   const response = await fetch(`${process.env.API_URL}${endpoint}`, {
     method: method || "GET",
-    body: body ? JSON.stringify(body) : "{}",
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: token as string,

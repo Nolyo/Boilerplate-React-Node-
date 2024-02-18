@@ -47,6 +47,11 @@ const userRepository = {
       where: {
         id,
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
     });
   },
 };

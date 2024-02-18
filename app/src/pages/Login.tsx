@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { fetchAPI } from "../fetch";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,6 +30,7 @@ function Login() {
       return;
     }
     localStorage.setItem("token", user.token);
+    navigate("/users/me");
   }
 
   return (

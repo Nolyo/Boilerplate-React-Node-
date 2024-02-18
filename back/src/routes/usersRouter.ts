@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import usersController from "../controllers/usersController";
 import { verifyUser } from "./authMiddleware";
+import { authenticateUserRequest } from "../types/usersType";
 
 const router = express.Router();
 /**
@@ -15,6 +16,19 @@ router.get("/", async (req: Request, res: Response) => {
     res.status(500).send(error.message);
   }
 });
+
+router.get(
+  "/me",
+  verifyUser,
+  async (req: Request & authenticateUserRequest, res: Response) => {
+    try {
+      const user = await usersController.getById(req.userId as number);
+      res.json(user);
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
+  }
+);
 
 router.get("/:id", verifyUser, async (req: Request, res: Response) => {
   if (!req.params.id || isNaN(parseInt(req.params.id))) {
