@@ -3,6 +3,7 @@ type paramsType = {
   method?: string;
   body?: string;
 };
+
 export async function fetchAPI(params: paramsType) {
   const { endpoint, method, body } = params;
   const response = await fetch(`${process.env.API_URL}${endpoint}`, {

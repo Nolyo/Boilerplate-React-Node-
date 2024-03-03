@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { fetchAPI } from "../fetch";
+import { fetchAPI } from "../helpers/fetch";
 import { useNavigate } from "react-router-dom";
 
 function Login() {

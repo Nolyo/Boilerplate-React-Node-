@@ -1,13 +1,13 @@
-import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 
-import Link from "../Components/Link";
 import { useEffect, useState } from "react";
-import { fetchAPIAuth } from "../fetch";
+import { fetchAPIAuth } from "../helpers/fetch";
 import { User } from "../types";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [user, setUser] = useState<User | null>();
+  const router = useNavigate();
 
   async function fetchMe() {
     const data = await fetchAPIAuth({
@@ -15,6 +15,9 @@ function Profile() {
       method: "GET",
     });
     setUser(data);
+    if (data.error) {
+      router("/auth/login");
+    }
   }
 
   useEffect(() => {
